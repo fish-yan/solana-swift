@@ -91,7 +91,7 @@ public class JSONRPCAPIClient: SolanaAPIClient {
     }
 
     public func getFeeForMessage(message: String, commitment: Commitment?) async throws -> UInt64? {
-        let result: Rpc<UInt64?> = try await get(method: "getFeeForMessage", params: [RequestConfiguration(commitment: commitment)])
+        let result: Rpc<UInt64?> = try await get(method: "getFeeForMessage", params: [message, RequestConfiguration(commitment: commitment)])
         return result.value
     }
 
