@@ -117,9 +117,9 @@ public protocol SolanaAPIClient {
     /// - Throws: APIClientError
     /// - Returns The result field will be an array of u64 integers listing confirmed blocks starting at start_slot for
     /// up to limit blocks, inclusive
-    /// - SeeAlso https://docs.solana.com/developing/clients/jsonrpc-api#getfees
+    /// - SeeAlso https://solana.com/zh/docs/rpc/http/getfeeformessage
     ///
-    func getFees(commitment: Commitment?) async throws -> Fee
+    func getFeeForMessage(message: String, commitment: Commitment?) async throws -> UInt64?
 
     /// Returns minimum balance required to make account rent exempt
     /// - Parameters:
@@ -278,15 +278,15 @@ public protocol SolanaAPIClient {
     /// - SeeAlso https://docs.solana.com/developing/clients/jsonrpc-api#getsignaturestatuses
     ///
     func observeSignatureStatus(signature: String, timeout: Int, delay: Int) -> AsyncStream<PendingTransactionStatus>
-
+    
     /// Returns a recent block hash from the ledger, and a fee schedule that can be used to compute the cost of
     /// submitting a transaction using it.
     /// - Parameters:
     ///  - commitment: (optional) Commitment
     /// - Throws: APIClientError
-    /// - SeeAlso https://docs.solana.com/developing/clients/jsonrpc-api#getrecentblockhash
+    /// - SeeAlso https://solana.com/zh/docs/rpc/http/getlatestblockhash
     ///
-    func getRecentBlockhash(commitment: Commitment?) async throws -> String
+    func getLatestBlockhash(commitment: Commitment?) async throws -> String
 
     /// Returns signatures for confirmed transactions that include the given address in their accountKeys list.
     /// Returns signatures backwards in time from the provided signature or most recent confirmed block
