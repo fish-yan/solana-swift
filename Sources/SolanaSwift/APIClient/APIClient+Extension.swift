@@ -19,7 +19,7 @@ public extension SolanaAPIClient {
     }
 
     func getMinimumBalanceForRentExemption(span: UInt64) async throws -> UInt64 {
-        try await getMinimumBalanceForRentExemption(dataLength: span, commitment: "finalized")
+        try await getMinimumBalanceForRentExemption(dataLength: span, commitment: nil)
     }
     
     func getLatestBlockhash() async throws -> String {
