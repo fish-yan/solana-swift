@@ -73,7 +73,7 @@ public extension Bignum {
 }
 
 /// Extension for Data to interoperate with Bignum
-public extension Data {
+extension Data {
     /// Hexadecimal string representation of the underlying data
     var hexString: String {
         withUnsafeBytes { (buf: UnsafePointer<UInt8>) -> String in

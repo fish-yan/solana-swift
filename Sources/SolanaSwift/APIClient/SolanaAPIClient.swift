@@ -143,8 +143,6 @@ public protocol SolanaAPIClient {
     /// - SeeAlso https://docs.solana.com/developing/clients/jsonrpc-api#getsignaturestatuses
     ///
     func getSignatureStatuses(signatures: [String], configs: RequestConfiguration?) async throws -> [SignatureStatus?]
-    /// - SeeAlso getSignatureStatuses(signatures: , configs:) async throws -> [SignatureStatus?]
-    func getSignatureStatus(signature: String, configs: RequestConfiguration?) async throws -> SignatureStatus
 
     /// Returns the token balance of an SPL Token account
     /// - Parameters:

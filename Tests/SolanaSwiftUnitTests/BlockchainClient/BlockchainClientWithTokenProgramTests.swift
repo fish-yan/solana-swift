@@ -91,9 +91,7 @@ final class BlockchainClientWithTokenProgramTests: XCTestCase {
             decimals: 6,
             from: source,
             to: destination,
-            amount: amount.toLamport(decimals: 6),
-            lamportsPerSignature: 5000,
-            minRentExemption: 2_039_280
+            amount: amount.toLamport(decimals: 6)
         )
         .preparedTransaction
 
@@ -109,6 +107,10 @@ final class BlockchainClientWithTokenProgramTests: XCTestCase {
 }
 
 private class MockAPIClient: SolanaAPIClient {
+    func getFeeForMessage(message: String, commitment: SolanaSwift.Commitment?) async throws -> UInt64? {
+        fatalError()
+    }
+    
     let testCase: String
 
     init(testCase: String) {
@@ -287,10 +289,6 @@ private class MockAPIClient: SolanaAPIClient {
     func getSignatureStatuses(signatures _: [String],
                               configs _: RequestConfiguration?) async throws -> [SignatureStatus?]
     {
-        fatalError()
-    }
-
-    func getSignatureStatus(signature _: String, configs _: RequestConfiguration?) async throws -> SignatureStatus {
         fatalError()
     }
 

@@ -96,7 +96,7 @@ public class JSONRPCAPIClient: SolanaAPIClient {
     }
 
     public func getMinimumBalanceForRentExemption(dataLength: UInt64,
-                                                  commitment: Commitment? = "recent") async throws -> UInt64
+                                                  commitment: Commitment? = "finalized") async throws -> UInt64
     {
         try await get(
             method: "getMinimumBalanceForRentExemption",
@@ -119,15 +119,6 @@ public class JSONRPCAPIClient: SolanaAPIClient {
         let result: Rpc<[SignatureStatus?]> = try await get(method: "getSignatureStatuses",
                                                             params: [signatures, configs])
         return result.value
-    }
-
-    public func getSignatureStatus(signature: String,
-                                   configs _: RequestConfiguration? = nil) async throws -> SignatureStatus
-    {
-        guard let result = try await getSignatureStatuses(signatures: [signature]).first else {
-            throw APIClientError.invalidResponse
-        }
-        return try result ?! APIClientError.invalidResponse
     }
 
     public func getTokenAccountBalance(pubkey: String,

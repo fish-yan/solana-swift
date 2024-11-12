@@ -13,7 +13,7 @@ extension Array {
     }
 }
 
-public extension Array where Element == UInt8 {
+extension Array where Element == UInt8 {
     init(hex: String) {
         self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
         var buffer: UInt8?

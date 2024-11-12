@@ -149,7 +149,7 @@ let result = try await apiClient.getBlockHeight()
 
 // To get balance of the current account
 guard let account = try? accountStorage.account?.publicKey.base58EncodedString else { throw UnauthorizedError }
-let balance = try await apiClient.getBalance(account: account, commitment: "recent")
+let balance = try await apiClient.getBalance(account: account, commitment: "finalized")
 ```
 
 Wait for confirmation method.

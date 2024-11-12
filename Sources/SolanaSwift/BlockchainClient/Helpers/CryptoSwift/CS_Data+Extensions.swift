@@ -12,7 +12,7 @@ public extension Data {
 }
 
 public extension Data {
-    init(hex: String) {
+    internal init(hex: String) {
         self.init([UInt8](hex: hex))
     }
 
@@ -20,11 +20,11 @@ public extension Data {
         Array(self)
     }
 
-    func toHexString() -> String {
+    internal func toHexString() -> String {
         bytes.toHexString()
     }
 
-    func sha256() -> Data {
+    internal func sha256() -> Data {
         var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
         withUnsafeBytes {
             _ = CC_SHA256($0.baseAddress, CC_LONG(count), &hash)

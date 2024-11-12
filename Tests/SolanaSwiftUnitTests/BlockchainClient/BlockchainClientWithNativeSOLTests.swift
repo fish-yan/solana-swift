@@ -253,10 +253,6 @@ private class MockAPIClient: SolanaAPIClient {
         fatalError()
     }
 
-    func getSignatureStatus(signature _: String, configs _: RequestConfiguration?) async throws -> SignatureStatus {
-        fatalError()
-    }
-
     func getTokenAccountBalance(pubkey _: String, commitment _: Commitment?) async throws -> TokenAccountBalance {
         fatalError()
     }
