@@ -174,13 +174,15 @@ public struct BufferInfo<T: BufferLayout>: Decodable, Equatable {
     public let data: T
     public let executable: Bool
     public let rentEpoch: UInt64
+    public let space: UInt64
 
-    public init(lamports: Lamports, owner: String, data: T, executable: Bool, rentEpoch: UInt64) {
+    public init(lamports: Lamports, owner: String, data: T, executable: Bool, rentEpoch: UInt64, space: UInt64) {
         self.lamports = lamports
         self.owner = owner
         self.data = data
         self.executable = executable
         self.rentEpoch = rentEpoch
+        self.space = space
     }
 }
 
