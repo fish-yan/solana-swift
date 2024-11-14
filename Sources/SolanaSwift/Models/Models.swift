@@ -74,6 +74,11 @@ public struct ConfirmedBlock: Decodable {
     public let blockTime: UInt64?
 }
 
+public struct PrioritizationFee: Decodable {
+    public let slot: Int64
+    public let prioritizationFee: UInt64
+}
+
 public struct Reward: Decodable {
     public let pubkey: String
     public let lamports: Lamports

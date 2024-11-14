@@ -65,6 +65,15 @@ public protocol SolanaAPIClient {
     /// - SeeAlso https://docs.solana.com/developing/clients/jsonrpc-api#getblockheight
     ///
     func getBlockHeight() async throws -> UInt64
+    
+    /// Returns a list of prioritization fees from recent blocks.
+    /// the per-compute-unit fee paid by at least one successfully landed transaction,
+    /// specified in increments of micro-lamports (0.000001 lamports)
+    /// - Throws: APIClientError
+    /// - Returns Recent PrioritizationFee
+    /// - SeeAlso https://solana.com/zh/docs/rpc/http/getrecentprioritizationfees
+    ///
+    func getRecentPrioritizationFees(accounts: [String]) async throws -> [PrioritizationFee]
 
     /// Returns a list of confirmed blocks starting at the given slot
     /// - Parameters:
