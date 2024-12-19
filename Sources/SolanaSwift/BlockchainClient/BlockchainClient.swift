@@ -130,7 +130,8 @@ public class BlockchainClient: SolanaBlockchainClient {
         feeCalculator: FeeCalculator? = nil
     ) async throws -> (preparedTransaction: PreparedTransaction, realDestination: String) {
         let feePayer = feePayer ?? account.publicKey
-
+        let accountInfo: BufferInfo<TokenAccountState>? = try? await apiClient.getAccountInfo(account: mintAddress)
+        let tokenProgramId = (try? PublicKey(string: accountInfo?.owner)) ?? tokenProgramId
         let splDestination = try await apiClient.findSPLTokenDestinationAddress(
             mintAddress: mintAddress,
             destinationAddress: destinationAddress,

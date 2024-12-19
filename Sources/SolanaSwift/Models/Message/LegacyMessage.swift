@@ -61,7 +61,7 @@ public struct Message: IMessage, Equatable {
         return data
     }
 
-    static func from(data: Data) throws -> Message {
+    public static func from(data: Data) throws -> Message {
         var data = data
 
         let numRequiredSignatures = data.removeFirst()
