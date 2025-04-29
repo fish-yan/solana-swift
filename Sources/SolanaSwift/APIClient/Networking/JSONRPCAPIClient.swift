@@ -98,6 +98,15 @@ public class JSONRPCAPIClient: SolanaAPIClient {
         let result: Rpc<UInt64?> = try await get(method: "getFeeForMessage", params: [message, RequestConfiguration(commitment: commitment)])
         return result.value
     }
+    
+    public func getFeeForMessage(message: String, commitment: Commitment? = nil) async throws -> Lamports {
+        let result: Rpc<Lamports> = try await self.request(
+          method: "getFeeForMessage",
+          params: [message, RequestConfiguration(commitment: commitment)]
+        )
+        
+        return result.value
+    }
 
     public func getMinimumBalanceForRentExemption(dataLength: UInt64,
                                                   commitment: Commitment? = nil) async throws -> UInt64
@@ -115,6 +124,14 @@ public class JSONRPCAPIClient: SolanaAPIClient {
             throw APIClientError.blockhashNotFound
         }
         return blockhash
+    }
+    
+    public func getLatestBlockhash(commitment: Commitment? = nil) async throws -> String {
+        let result: Rpc<LatestBlockhash> = try await get(
+            method: "getLatestBlockhash",
+            params: [RequestConfiguration(commitment: commitment)])
+        
+        return result.value.blockhash
     }
 
     public func getSignatureStatuses(signatures: [String],
@@ -170,7 +187,9 @@ public class JSONRPCAPIClient: SolanaAPIClient {
     }
 
     public func getTokenLargestAccounts(pubkey: String, commitment: Commitment? = nil) async throws -> [TokenAmount] {
-        try await get(method: "getTokenLargestAccounts", params: [pubkey, RequestConfiguration(commitment: commitment)])
+        let result: Rpc<[TokenAmount]> = try await get(method: "getTokenLargestAccounts", 
+                                                       params: [pubkey, RequestConfiguration(commitment: commitment)])
+        return result.value
     }
 
     public func getTokenSupply(pubkey: String, commitment: Commitment? = nil) async throws -> TokenAmount {

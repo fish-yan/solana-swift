@@ -189,6 +189,17 @@ class APIClientTests: XCTestCase {
         XCTAssertNotNil(result)
         XCTAssertEqual(result, 5000)
     }
+    
+    func testGetFeeForMessage() async throws {
+        let mock = NetworkManagerMock(NetworkManagerMockJSON["getFeeForMessage"]!)
+        let apiClient = JSONRPCAPIClient(endpoint: endpoint, networkManager: mock)
+        let result = try! await apiClient.getFeeForMessage(
+            message: Data([0x01]).base64EncodedString(),
+            commitment: nil
+        )
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, 1337)
+    }
 
     func testGetMinimumBalanceForRentExemption() async throws {
         let mock = NetworkManagerMock(NetworkManagerMockJSON["getMinimumBalanceForRentExemption"]!)
@@ -198,6 +209,14 @@ class APIClientTests: XCTestCase {
         XCTAssertEqual(result, 890_880)
     }
 
+    func testGetLatestBlockhash() async throws {
+        let mock = NetworkManagerMock(NetworkManagerMockJSON["getLatestBlockhash"]!)
+        let apiClient = JSONRPCAPIClient(endpoint: endpoint, networkManager: mock)
+        let result = try! await apiClient.getLatestBlockhash(commitment: nil)
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, "63ionHTAM94KaSujUCg23hfg7TLharchq5BYXdLGqia1")
+    }
+    
     func testGetLatestBlockhash() async throws {
         let mock = NetworkManagerMock(NetworkManagerMockJSON["getLatestBlockhash"]!)
         let apiClient = JSONRPCAPIClient(endpoint: endpoint, networkManager: mock)
@@ -297,6 +316,19 @@ class APIClientTests: XCTestCase {
         XCTAssertEqual(result.first?.account.owner, Token2022Program.id.base58EncodedString)
         XCTAssertEqual(result.first?.pubkey, "43W7QvyKr5hJhFRhvteb7VbsLdwGQG3VZ2fRYVcw5yFN")
     }
+    
+    func testGetTokenLargestAccounts() async throws {
+        let mock = NetworkManagerMock(NetworkManagerMockJSON["getTokenLargestAccounts"]!)
+        let apiClient = JSONRPCAPIClient(endpoint: endpoint, networkManager: mock)
+        let result = try await apiClient.getTokenLargestAccounts(
+            pubkey: "3wyAj7Rt1TWVPZVteFJPLa26JmLvdb1CAKEFZm3NY75E"
+        )
+        XCTAssertEqual(result.first?.address, "FYjHNoFtSQ5uijKrZFyYAxvEr87hsKXkXcxkcmkBAf4r")
+        XCTAssertEqual(result.first?.amount, "771")
+        XCTAssertEqual(result.first?.decimals, 2)
+        XCTAssertEqual(result.first?.uiAmount, 7.71)
+
+    }
 
     func testSendTransactionError1() async throws {
         let mock = NetworkManagerMock(NetworkManagerMockJSON["sendTransactionError1"]!)
@@ -371,9 +403,11 @@ private var NetworkManagerMockJSON = [
     "getConfirmedSignaturesForAddress": "{\"jsonrpc\":\"2.0\",\"result\":[\"1\",\"2\",\"3\"],\"id\":\"71F4389A-854F-4738-A869-CC455598C11C\"}\n",
     "getTransaction": "{\"jsonrpc\":\"2.0\",\"result\":{\"blockTime\":1647268521,\"meta\":{\"err\":null,\"fee\":10000,\"innerInstructions\":[{\"index\":0,\"instructions\":[{\"accounts\":[\"11111111111111111111111111111111\",\"5qePAZpkrsxkhPQrwmmzFmi84xBwV4Z2hBuHh2jFA1FA\",\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"GyvYVTFgrfCmkE4pHzw44xyELoaivkYDeP2P1TmeqFSs\",\"11111111111111111111111111111111\",\"HSqVcxpDaZzwkHxreLisDtR9bQsLaTCMzMATFVhDoeNe\",\"fjohsw9j8aBJaEE5ddzHk3AgMjdbQSXrMoPGrepNHrB\"],\"data\":\"12B5oCT463JwdTFKK1Xm3F2xL1NoDdJQGeMuRKappf2aRUXjfSUEeEPQYcW1cMis8VD\",\"programId\":\"namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX\"},{\"parsed\":{\"info\":{\"destination\":\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"lamports\":2227200,\"source\":\"5qePAZpkrsxkhPQrwmmzFmi84xBwV4Z2hBuHh2jFA1FA\"},\"type\":\"transfer\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"},{\"parsed\":{\"info\":{\"account\":\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"space\":192},\"type\":\"allocate\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"},{\"parsed\":{\"info\":{\"account\":\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"owner\":\"namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX\"},\"type\":\"assign\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"},{\"parsed\":{\"info\":{\"destination\":\"6GxxbzceU62bMwRcrRAnDqgfCQD9Z1FLUJCdwnFpFUvX\",\"lamports\":974400,\"source\":\"5qePAZpkrsxkhPQrwmmzFmi84xBwV4Z2hBuHh2jFA1FA\"},\"type\":\"transfer\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"},{\"parsed\":{\"info\":{\"account\":\"6GxxbzceU62bMwRcrRAnDqgfCQD9Z1FLUJCdwnFpFUvX\",\"space\":12},\"type\":\"allocate\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"},{\"parsed\":{\"info\":{\"account\":\"6GxxbzceU62bMwRcrRAnDqgfCQD9Z1FLUJCdwnFpFUvX\",\"owner\":\"B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog\"},\"type\":\"assign\"},\"program\":\"system\",\"programId\":\"11111111111111111111111111111111\"}]}],\"logMessages\":[\"Program B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog invoke [1]\",\"Program namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX invoke [2]\",\"Program log: Entrypoint\",\"Program log: Beginning processing\",\"Program log: Instruction unpacked\",\"Program log: Instruction: Create\",\"Program 11111111111111111111111111111111 invoke [3]\",\"Program 11111111111111111111111111111111 success\",\"Program 11111111111111111111111111111111 invoke [3]\",\"Program 11111111111111111111111111111111 success\",\"Program 11111111111111111111111111111111 invoke [3]\",\"Program 11111111111111111111111111111111 success\",\"Program namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX consumed 20584 of 191569 compute units\",\"Program namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX success\",\"Program 11111111111111111111111111111111 invoke [2]\",\"Program 11111111111111111111111111111111 success\",\"Program 11111111111111111111111111111111 invoke [2]\",\"Program 11111111111111111111111111111111 success\",\"Program 11111111111111111111111111111111 invoke [2]\",\"Program 11111111111111111111111111111111 success\",\"Program B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog consumed 41308 of 200000 compute units\",\"Program B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog success\"],\"postBalances\":[443590671,100000000,2227200,974400,1,1141440,1009200,0,71353866,1001293440],\"postTokenBalances\":[],\"preBalances\":[446802271,100000000,0,0,1,1141440,1009200,0,71353866,1001293440],\"preTokenBalances\":[],\"rewards\":[],\"status\":{\"Ok\":null}},\"slot\":124916513,\"transaction\":{\"message\":{\"accountKeys\":[{\"pubkey\":\"5qePAZpkrsxkhPQrwmmzFmi84xBwV4Z2hBuHh2jFA1FA\",\"signer\":true,\"writable\":true},{\"pubkey\":\"fjohsw9j8aBJaEE5ddzHk3AgMjdbQSXrMoPGrepNHrB\",\"signer\":true,\"writable\":false},{\"pubkey\":\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"signer\":false,\"writable\":true},{\"pubkey\":\"6GxxbzceU62bMwRcrRAnDqgfCQD9Z1FLUJCdwnFpFUvX\",\"signer\":false,\"writable\":true},{\"pubkey\":\"11111111111111111111111111111111\",\"signer\":false,\"writable\":false},{\"pubkey\":\"namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX\",\"signer\":false,\"writable\":false},{\"pubkey\":\"SysvarRent111111111111111111111111111111111\",\"signer\":false,\"writable\":false},{\"pubkey\":\"GyvYVTFgrfCmkE4pHzw44xyELoaivkYDeP2P1TmeqFSs\",\"signer\":false,\"writable\":false},{\"pubkey\":\"HSqVcxpDaZzwkHxreLisDtR9bQsLaTCMzMATFVhDoeNe\",\"signer\":false,\"writable\":false},{\"pubkey\":\"B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog\",\"signer\":false,\"writable\":false}],\"instructions\":[{\"accounts\":[\"11111111111111111111111111111111\",\"namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX\",\"SysvarRent111111111111111111111111111111111\",\"5qePAZpkrsxkhPQrwmmzFmi84xBwV4Z2hBuHh2jFA1FA\",\"F2kK1Z55NTZcagih78suvreP3UjNfrVLP2UBcR3orNub\",\"6GxxbzceU62bMwRcrRAnDqgfCQD9Z1FLUJCdwnFpFUvX\",\"GyvYVTFgrfCmkE4pHzw44xyELoaivkYDeP2P1TmeqFSs\",\"11111111111111111111111111111111\",\"HSqVcxpDaZzwkHxreLisDtR9bQsLaTCMzMATFVhDoeNe\",\"fjohsw9j8aBJaEE5ddzHk3AgMjdbQSXrMoPGrepNHrB\"],\"data\":\"1RxqKETLww2ut33YFYhShTyYLvJhfTf7WPWUiLK5XGL58wSWFHKvt4YJUXDoL8JFGkzGzVbP\",\"programId\":\"B59xBt3AVAcV5jiHGEbGHe93mbycA44EK3vA6E4VqKog\"}],\"recentBlockhash\":\"U9hxJeX42n3rEG8FJychJpeQucN1QqKoMb56GigUdrm\"},\"signatures\":[\"3kNdBJeLhLQX8FsyHjAKrtfnq5L6NwjQ3Nm96Wyx1pk5GFicbE47mpu2CtiU8krZDVDk7Di5ELAoKtw91Yj89bQ\",\"4w7p5ZvAgzZ7THtxKxRbFqAuD69Uk82tnbuz9BT822MRiGZUypAkok8u4sTPizjHmjx65vpGcw4SwFXu8hgafCoh\"]}},\"id\":\"03194776-D570-4887-8A2A-84007EE79A66\"}\n",
     "getEpochInfo": "{\"jsonrpc\":\"2.0\",\"result\":{\"absoluteSlot\":131686768,\"blockHeight\":119443373,\"epoch\":304,\"slotIndex\":358768,\"slotsInEpoch\":432000,\"transactionCount\":71271072342},\"id\":\"AE699DFA-84E8-495C-8B06-F30DDFA6C56D\"}\n",
-    "getFeeForMessage": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":131770081},\"value\":5000,\"id\":\"3FF1AACE-812A-4106-8C34-6EF66237673C\"}\n",
+    "getFees": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":131770081},\"value\":{\"blockhash\":\"7jvToPQ4ASj3xohjM117tMqmtppQDaWVADZyaLFnytFr\",\"feeCalculator\":{\"lamportsPerSignature\":5000},\"lastValidBlockHeight\":119512694,\"lastValidSlot\":131770381}},\"id\":\"3FF1AACE-812A-4106-8C34-6EF66237673C\"}\n",
+    "getFeeForMessage": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":5068},\"value\":1337},\"id\": \"FD486F1A-82F6-4295-B0B1-9E8905239A67\"}",
     "getMinimumBalanceForRentExemption": "{\"jsonrpc\":\"2.0\",\"result\":890880,\"id\":\"25423C5F-2FF3-4134-8CB3-9090BFCB2CE3\"}\n",
-    "getLatestBlockhash": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":131780453},\"value\":{\"blockhash\":\"63ionHTAM94KaSujUCg23hfg7TLharchq5BYXdLGqia1\",\"feeCalculator\":{\"lamportsPerSignature\":5000}}},\"id\":\"21D61199-F235-4CC9-9BE6-06745D3AC69E\"}\n",
+    "getRecentBlockhash": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":131780453},\"value\":{\"blockhash\":\"63ionHTAM94KaSujUCg23hfg7TLharchq5BYXdLGqia1\",\"feeCalculator\":{\"lamportsPerSignature\":5000}}},\"id\":\"21D61199-F235-4CC9-9BE6-06745D3AC69E\"}\n",
+    "getLatestBlockhash": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":131780453},\"value\":{\"blockhash\":\"63ionHTAM94KaSujUCg23hfg7TLharchq5BYXdLGqia1\",\"lastValidBlockHeight\":3090}},\"id\":\"9C1116F2-688C-4A71-A7E4-FB436D9D9E44\"}\n",
     "getMultipleAccounts": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":132420615},\"value\":[{\"data\":[\"APoAh5MDAAAAAAKLjuya35R64GfrOPbupmMcxJ1pmaH2fciYq9DxSQ88FioLlNul6FnDNF06/RKhMFBVI8fFQKRYcqukjYZitosKxZBjjg9hLR2AsDm2e/itloPtlrPeVDPIVdnO4+dmM2JiSZHdhsj7+Fn94OTNte9elt1ek0p487C2fLrFA9CvUPerjZvfP97EqlF9OXbPSzaGJzdmfWhk4jRnThsg5scAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAObFpMVhxY3CRrzEcywhYTa4a4SsovPp4wKPRTbTJVtzAfQBZAAAAABDU47UFrGnHMTsb0EaE1TBoVQGvCIHKJ4/EvpK3zvIfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACsWQY44PYS0dgLA5tnv4rZaD7Zaz3lQzyFXZzuPnZjMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1345194,\"owner\":\"617jbWo616ggkDxvW1Le8pV38XLbVSyWY8ae6QUmGBAU\",\"rentEpoch\":306}]},\"id\":\"D5BCACBB-3CE7-44D6-8F66-C57470A90440\"}\n",
     "getMultipleMintDatas": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":132426903},\"value\":[{\"data\":[\"AQAAABzjWe1aAS4E+hQrnHUaHF6Hz9CgFhuchf/TG3jN/Nj2dbn7oe7/EAAGAQEAAAAqnl7btTwEZ5CY/3sSZRcUQ0/AjFYqmjuGEQXmctQicw==\",\"base64\"],\"executable\":false,\"lamports\":122356825965,\"owner\":\"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA\",\"rentEpoch\":306},{\"data\":[\"AQAAAAXqnPFs5BGY8aSZN8iMNwqU1K//ibW6y470XmMku3j3J0UE6/G2BgAGAQEAAAAF6pzxbOQRmPGkmTfIjDcKlNSv/4m1usuO9F5jJLt49w==\",\"base64\"],\"executable\":false,\"lamports\":23879870146,\"owner\":\"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA\",\"rentEpoch\":306}]},\"id\":\"65766E4D-F678-489A-943B-8D70B5C6F1ED\"}\n",
     "simulateTransaction": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":132581497},\"value\":{\"accounts\":null,\"err\":\"AccountNotFound\",\"logs\":[],\"unitsConsumed\":0}},\"id\":\"3916EC69-2924-40E7-8843-8CBA8C6DB14C\"}\n",
@@ -382,6 +416,8 @@ private var NetworkManagerMockJSON = [
     "getTokenAccountsByOwner": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":134133059},\"value\":[{\"account\":{\"data\":[\"KLrvuAuq+8gDEGl28m80PrYteWuPlqjGuBpCW5rA84gJ7HiGa7fztefqNjU2MSBOZ3HPlRmb0eAXj0bEanmyfAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"base64\"],\"executable\":false,\"lamports\":2039280,\"owner\":\"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA\",\"rentEpoch\":309},\"pubkey\":\"9nuVPk3KR7oUXmDsHL7irue2Nxaj3ejvuBXoaEcXMmN7\"},{\"account\":{\"data\":[\"ppdSk884LShYnHoHm7XiDlZ28iJVm9BHPgrAEfxU44AJ7HiGa7fztefqNjU2MSBOZ3HPlRmb0eAXj0bEanmyfAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"base64\"],\"executable\":false,\"lamports\":2039280,\"owner\":\"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA\",\"rentEpoch\":309},\"pubkey\":\"9bNJ7AF8w1Ms4BsqpqbUPZ16vCSePYJpgSBUTRqd8ph4\"}]},\"id\":\"0891812F-1F8B-4927-80F7-C7C1C1D990B3\"}\n",
     "getToken2022AccountsByOwner":
         #"{"jsonrpc":"2.0","result":{"context":{"apiVersion":"1.17.14","slot":239989261},"value":[{"account":{"data":["qDijZLhcKuVLVBmL6Ve9S9DvSU7kn1XtkCnOtnDXGjA1zKFCx20D2kF7X/jEMh09sgYqyBraJk1DWsFwaUfQkCtqbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgcAAAACAAgAAAAAAAAAAAA=","base64"],"executable":false,"lamports":2157600,"owner":"TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb","rentEpoch":0,"space":182},"pubkey":"43W7QvyKr5hJhFRhvteb7VbsLdwGQG3VZ2fRYVcw5yFN"}]},"id":1}"#,
+    "getTokenLargestAccounts":
+        #"{"jsonrpc":"2.0","result":{"context":{"slot":1114},"value":[{"address":"FYjHNoFtSQ5uijKrZFyYAxvEr87hsKXkXcxkcmkBAf4r","amount":"771","decimals":2,"uiAmount":7.71,"uiAmountString":"7.71"},{"address":"BnsywxTcaYeNUtzrPxQUvzAWxfzZe3ZLUJ4wMMuLESnu","amount":"229","decimals":2,"uiAmount":2.29,"uiAmountString":"2.29"}]},"id":1}"#,
     "sendTransactionError1": #"{"jsonrpc":"2.0","error":{"code":-32003,"message":"Transaction precompile verification failure InvalidAccountIndex"},"id":"7DEDE6E5-95E7-4866-BFC0-B4C10A76B457"}"#,
     "getTokenAccountBalance": #"{"jsonrpc":"2.0","result":{"context":{"slot":135942588},"value":{"amount":"491717631607","decimals":9,"uiAmount":491.717631607,"uiAmountString":"491.717631607"}},"id":"3D9E7B6E-B48D-40EF-B656-EA3054227CCD"}"#,
     "getHealth": #"{ "jsonrpc": "2.0", "result": "ok", "id": 1 }"#,
