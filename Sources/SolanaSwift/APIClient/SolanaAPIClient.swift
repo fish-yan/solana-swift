@@ -128,19 +128,7 @@ public protocol SolanaAPIClient {
     /// up to limit blocks, inclusive
     /// - SeeAlso https://solana.com/zh/docs/rpc/http/getfeeformessage
     ///
-    func getFees(commitment: Commitment?) async throws -> Fee
-    
-    /// Get the fee the network will charge for a particular Message
-    /// - Parameters:
-    ///  -  message: Base-64 encoded Message
-    ///  - commitment: Optional
-    /// - Throws: ApiClientError
-    /// - Returns Fee corresponding to the message at the specified blockhash
-    /// - SeeAlso https://solana.com/docs/rpc/http/getfeeformessage
-    /// - Note: This method is only available in solana-core v1.9 or newer.
-    /// Please use ``getFees(commitment:)`` for solana-core v1.8 and below.
-    ///
-    func getFeeForMessage(message: String, commitment: Commitment?) async throws -> Lamports
+    func getFeeForMessage(message: String, commitment: Commitment?) async throws -> UInt64?
 
     /// Returns minimum balance required to make account rent exempt
     /// - Parameters:
@@ -304,16 +292,6 @@ public protocol SolanaAPIClient {
     ///  - commitment: (optional) Commitment
     /// - Throws: APIClientError
     /// - SeeAlso https://solana.com/zh/docs/rpc/http/getlatestblockhash
-    ///
-    func getRecentBlockhash(commitment: Commitment?) async throws -> String
-    
-    /// Returns the latest blockhash
-    /// - Parameters:
-    ///  - commitment: (optional) Commitment
-    /// - Throws: APIClientError
-    /// - SeeAlso https://solana.com/docs/rpc/http/getlatestblockhash
-    /// - Note: This method is only available in solana-core v1.9 or newer.
-    /// Please use ``getRecentBlockhash(commitment:)`` for solana-core v1.8 and below.
     ///
     func getLatestBlockhash(commitment: Commitment?) async throws -> String
 

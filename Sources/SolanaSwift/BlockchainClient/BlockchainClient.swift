@@ -37,6 +37,7 @@ public class BlockchainClient: SolanaBlockchainClient {
         if let fc = fc {
             feeCalculator = fc
         } else {
+            print(transaction)
             let message = try transaction.serializeMessage().base64EncodedString()
             let (lps, minRentExemption) = try await(
                 apiClient.getFeeForMessage(message: message, commitment: nil),
